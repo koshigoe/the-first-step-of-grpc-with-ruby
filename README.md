@@ -1,7 +1,5 @@
-The first steop of gRPC with Ruby
+Ruby で学ぶ gRPC はじめの一歩
 ====
-
-Ruby で学ぶ gRPC はじめの一歩。
 
 
 Setup
@@ -42,6 +40,38 @@ $ bin/notebook_front_server
 
 ```
 $ open http://localhost:4567
+```
+
+### コンソールから実行
+
+```
+$ bin/console
+```
+
+認証。
+
+```
+> auth = Study20180216::Authenticator::Stub.new('localhost:50052', :this_channel_is_insecure)
+> credentials = Study20180216::Credentials.new(
+    password: Study20180216::PasswordCredentials.new(
+      password: Study20180216::Password.new(
+        id: 'user',
+        raw_password: 'pass',
+      )
+    )
+  )
+> auth.authenticate(Study20180216::AuthRequest.new(credentials: credentials))
+```
+
+ページ作成。
+
+```
+> note = Study20180216::Notebook::Stub.new('localhost:50051', :this_channel_is_insecure)
+> page_request = Study20180216::PageRequest.new(
+    credentials: credentials,
+    page: Study20180216::Page.new(title: 'TITLE 2018/02/13', content: 'CONTENT 2018/02/13')
+  )
+> note.create_page(page_request)
 ```
 
 
