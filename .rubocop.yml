@@ -1,0 +1,50 @@
+AllCops:
+  Exclude:
+    - 'lib/*_pb.rb'
+    - 'vendor/**/*'
+
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - 'bin/**/*'
+    - 'test/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/LineLength:
+  Max: 128
+
+Metrics/MethodLength:
+  Max: 25
+  Exclude:
+    - 'bin/**/*'
+    - 'test/**/*'
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyCaseCondition:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/RescueStandardError:
+  EnforcedStyle: implicit
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: consistent_comma

@@ -1,0 +1,16 @@
+/**
+ * 共通型。
+ */
+
+syntax = "proto3";
+
+package study20180216;
+
+/**
+ * エラーオブジェクト。
+ */
+message Error {
+  string code    = 1; /// エラーコード。
+  string summary = 2; /// エラー概要。
+  string detail  = 3; /// エラー詳細。
+}

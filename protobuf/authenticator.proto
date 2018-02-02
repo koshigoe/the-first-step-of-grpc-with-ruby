@@ -1,0 +1,66 @@
+/**
+ * 認証。
+ */
+syntax = "proto3";
+
+package study20180216;
+
+import "common.proto";
+import "credentials.proto";
+import "user.proto";
+
+/**
+ * ページの CRUD を行うサービス。
+ */
+service Authenticator {
+  /// 登録する。
+  rpc Register (RegisterRequest) returns (RegisterResponse) {}
+  /// 認証する。
+  rpc Authenticate (AuthRequest) returns (AuthResponse) {}
+}
+
+/**
+ * 認証リクエストオブジェクト。
+ */
+message RegisterRequest {
+  User user         = 1; /// ユーザーオブジェクト。
+  Password password = 2; /// パスワード。
+}
+
+/**
+ * 認証レスポンスオブジェクト。
+ */
+message RegisterResponse {
+  enum Status {
+    OK    = 0; /// 正常応答。
+    ERROR = 1; /// エラー応答。
+  }
+  Status status = 1; /// 応答ステータス。
+  oneof result {
+    User user   = 2; /// ユーザーオブジェクト。
+    Error error = 3; /// エラーオブジェクト。
+  }
+}
+
+
+/**
+ * 認証リクエストオブジェクト。
+ */
+message AuthRequest {
+  Credentials credentials = 1; /// 認証情報。
+}
+
+/**
+ * 認証レスポンスオブジェクト。
+ */
+message AuthResponse {
+  enum Status {
+    OK    = 0; /// 正常応答。
+    ERROR = 1; /// エラー応答。
+  }
+  Status status = 1; /// 応答ステータス。
+  oneof result {
+    User user   = 2; /// ユーザーオブジェクト。
+    Error error = 3; /// エラーオブジェクト。
+  }
+}

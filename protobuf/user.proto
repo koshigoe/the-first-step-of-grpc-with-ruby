@@ -1,0 +1,19 @@
+/**
+ * ユーザー情報。
+ */
+
+syntax = "proto3";
+
+package study20180216;
+
+/**
+ * ユーザーオブジェクト。
+ */
+message User {
+  string id           = 1; /// ユーザーID。
+  string name         = 2; /// ユーザー名。
+  enum Role {
+    EDITOR            = 0; /// 編集者ロール。
+  }
+  repeated Role roles = 3; /// ロール。
+}

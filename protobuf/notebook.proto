@@ -1,0 +1,91 @@
+/**
+ * ノート。
+ *
+ */
+syntax = "proto3";
+
+package study20180216;
+
+import "common.proto";
+import "credentials.proto";
+import "user.proto";
+
+/**
+ * ページの CRUD を行うサービス。
+ */
+service Notebook {
+  /// ページを作成する。
+  rpc CreatePage (PageRequest) returns (PageResponse) {}
+  /// ページを取得する。
+  rpc GetPage (PageRequest) returns (PageResponse) {}
+  /// ページ一覧を取得する。
+  rpc ListPages (PagesRequest) returns (PagesResponse) {}
+  /// ページを更新する。
+  rpc UpdatePage (PageRequest) returns (PageResponse) {}
+  /// ページを削除する。
+  rpc DeletePage (PageRequest) returns (PageResponse) {}
+}
+
+/**
+ * ページオブジェクト。
+ */
+message Page {
+  string id      = 1; /// ページID。
+  string title   = 2; /// ページタイトル。
+  string content = 3; /// ページないよう。
+  User editor    = 4; /// 編集者。
+}
+
+/**
+ * ページ集合オブジェクト。
+ */
+message Pages {
+  repeated Page members = 1; /// ページ。
+}
+
+/**
+ * ページ操作用リクエストオブジェクト。
+ */
+message PageRequest {
+  Credentials credentials = 1; /// 認証情報。
+  Page page               = 2; /// ページオブジェクト。
+}
+
+/**
+ * ページ操作結果レスポンスオブジェクト。
+ */
+message PageResponse {
+  enum Status {
+    OK    = 0; /// 正常応答。
+    ERROR = 1; /// エラー応答。
+  }
+  Status status = 1; /// 応答ステータス。
+  oneof result {
+    Page page   = 2; /// ページオブジェクト。
+    Error error = 3; /// エラーオブジェクト。
+  }
+}
+
+/**
+ * ページ集合操作用リクエスオブジェクト。
+ */
+message PagesRequest {
+  Credentials credentials = 1; /// 認証情報。
+  uint32 page_number      = 2;
+  string query            = 3;
+}
+
+/**
+ * ページ集合レスポンスオブジェクト。
+ */
+message PagesResponse {
+  enum Status {
+    OK    = 0; /// 正常応答。
+    ERROR = 1; /// エラー応答。
+  }
+  Status status = 1; /// 応答ステータス。
+  oneof result {
+    Pages pages = 2; /// ページ集合オブジェクト。
+    Error error = 3; /// エラーオブジェクト。
+  }
+}

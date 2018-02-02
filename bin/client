@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+this_dir = File.expand_path('../', File.dirname(__FILE__))
+lib_dir = File.join(this_dir, 'lib')
+$LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
+
+require 'bundler/setup'
+require 'study20180216'
+require 'securerandom'
+
+def main
+  stub = Study20180216::Notebook::Stub.new('localhost:50051', :this_channel_is_insecure)
+
+  storage = Study20180216::Storage.new
+  storage.write(Study20180216::User.new(id: 'user', name: 'editor'))
+  storage.write(Study20180216::Password.new(id: 'user', hashed_password: Digest::SHA256.hexdigest('pass')))
+
+  digest = SecureRandom.hex(10)
+  request = Study20180216::PageRequest.new(
+    credentials: Study20180216::Credentials.new(
+      password: Study20180216::PasswordCredentials.new(
+        password: Study20180216::Password.new(
+          id: 'user',
+          raw_password: 'pass',
+        ),
+      ),
+    ),
+    page: Study20180216::Page.new(
+      title: "TEST #{digest}",
+      content: "CONTENT **#{digest}**",
+    ),
+  )
+  response = stub.create_page(request)
+
+  puts <<~EOF
+         id: #{response.page.id}
+      title: #{response.page.title}
+    content: #{response.page.content}
+     editor: #{response.page.editor.name}
+  EOF
+end
+
+main

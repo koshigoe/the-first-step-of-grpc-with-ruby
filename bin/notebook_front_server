@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+this_dir = File.expand_path('../', File.dirname(__FILE__))
+lib_dir = File.join(this_dir, 'lib')
+$LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
+
+require 'bundler/setup'
+require 'study20180216'
+require 'sinatra'
+require 'kramdown'
+
+get '/' do
+  stub = Study20180216::Notebook::Stub.new('localhost:50051', :this_channel_is_insecure)
+  response = stub.list_pages(Study20180216::PagesRequest.new)
+  pages = response.pages.members
+  markdown = pages.map { |page| "- [#{page.title}](/pages/#{page.id})" }.join("\n")
+  Kramdown::Document.new(markdown).to_html
+end
+
+get '/pages/:id' do
+  stub = Study20180216::Notebook::Stub.new('localhost:50051', :this_channel_is_insecure)
+  page = Study20180216::Page.new(id: params['id'])
+  response = stub.get_page(Study20180216::PageRequest.new(page: page))
+  Kramdown::Document.new(response.page.content).to_html
+end
